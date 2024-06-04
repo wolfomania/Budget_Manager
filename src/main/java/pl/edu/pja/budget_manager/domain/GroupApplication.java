@@ -3,6 +3,7 @@ package pl.edu.pja.budget_manager.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import pl.edu.pja.budget_manager.domain.keys.UserGroupKey;
 
 import java.time.LocalDateTime;
 
@@ -10,24 +11,32 @@ import java.time.LocalDateTime;
 @Table(name = "group_application")
 @Getter
 @Setter
+@Builder
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class GroupApplication {
 
-    @Id
+    /*@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long applicationId;
+    Long applicationId;*/
+    @EmbeddedId
+    UserGroupKey userGroupKey;
 
     @Column(columnDefinition = "TIMESTAMP")
     LocalDateTime date;
     String applicationText;
 
     @ManyToOne
-    @Column(name = "user_id")
+    @MapsId("user_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     User user;
 
     @ManyToOne
-    @Column(name = "group_id")
+    @MapsId("group_id")
+    @JoinColumn(name = "group_id", referencedColumnName = "group_id")
     BudgetGroup group;
+
+
 }

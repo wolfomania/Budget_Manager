@@ -47,6 +47,7 @@ public class User {
             })
     Set<Notification> notifications;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "user",
             cascade = {
                     CascadeType.PERSIST,
@@ -55,15 +56,17 @@ public class User {
             })
     Set<Transaction> transactions;
 
+    @ToString.Exclude
     @ManyToMany(mappedBy = "users")
     Set<BudgetGroup> groups;
 
+    @ToString.Exclude
     @OneToMany(
             mappedBy = "user",
             cascade = CascadeType.ALL,
             orphanRemoval = true,
-            targetEntity = GroupApplication.class
+            targetEntity = GroupApplication.class,
+            fetch = FetchType.EAGER
     )
     Set<GroupApplication> applications;
-
 }

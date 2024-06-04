@@ -33,11 +33,17 @@ public class BudgetGroup {
     @OneToMany(
             mappedBy = "group",
             cascade = CascadeType.ALL,
-            orphanRemoval = true
+            orphanRemoval = true,
+            targetEntity = GroupInvitation.class
     )
     Set<GroupInvitation> invitations;
 
-    @ManyToMany(mappedBy = "groups")
+    @ManyToMany
+    @JoinTable(
+            name = "group_user",
+            joinColumns = @JoinColumn(name = "group_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
     Set<User> users;
 
     @OneToMany(
