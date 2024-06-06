@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.web.context.annotation.SessionScope;
 import pl.edu.pja.budget_manager.domain.BudgetGroup;
+import pl.edu.pja.budget_manager.domain.Debt;
 import pl.edu.pja.budget_manager.domain.GroupApplication;
 import pl.edu.pja.budget_manager.domain.User;
 import pl.edu.pja.budget_manager.domain.keys.UserGroupKey;
@@ -22,7 +23,6 @@ public class BudgetManagerApplication {
 		ConfigurableApplicationContext context = SpringApplication.run(BudgetManagerApplication.class, args);
 //		BudgetManagerApplication app = context.getBean(BudgetManagerApplication.class);
 //		app.test(context);
-
 
 	}
 

@@ -19,6 +19,7 @@ public class GroupTransaction {
     Long groupTransactionId;*/
 
     @EmbeddedId
+    @Column(name = "group_transaction_id")
     GroupTransactionKey groupTransactionId;
 
     @ManyToOne
