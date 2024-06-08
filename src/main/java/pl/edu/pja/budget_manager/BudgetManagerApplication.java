@@ -9,6 +9,7 @@ import pl.edu.pja.budget_manager.domain.BudgetGroup;
 import pl.edu.pja.budget_manager.domain.Debt;
 import pl.edu.pja.budget_manager.domain.GroupApplication;
 import pl.edu.pja.budget_manager.domain.User;
+import pl.edu.pja.budget_manager.domain.keys.GroupTransactionKey;
 import pl.edu.pja.budget_manager.domain.keys.UserGroupKey;
 import pl.edu.pja.budget_manager.repositories.BudgetGroupRepository;
 import pl.edu.pja.budget_manager.repositories.GroupApplicationRepository;

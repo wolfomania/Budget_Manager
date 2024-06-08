@@ -3,9 +3,10 @@ package pl.edu.pja.budget_manager.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -26,13 +27,14 @@ public class User {
     @ToString.Exclude
     String password;
 
-    String nickname;
+    String username;
 
     @ManyToOne
     @JoinColumn(name = "currency_id", referencedColumnName = "currency_id")
     Currency preferredCurrency;
 
     @NonNull
+    @CreationTimestamp
     @Column(columnDefinition = "TIMESTAMP")
     LocalDateTime creationDate;
 

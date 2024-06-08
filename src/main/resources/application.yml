@@ -2,6 +2,7 @@ spring:
   application:
     name: Budget_Manager
 
+# Server configuration
   datasource:
     url: jdbc:mysql://localhost:3306/TPO
     username: root
@@ -17,3 +18,11 @@ spring:
     properties:
       hibernate:
         format_sql=true:
+
+# Jwt configuration
+  security:
+    jwt:
+      key: JWT_KEY
+      expiration: 600000
+      header: Authorization
+      prefix: Bearer
