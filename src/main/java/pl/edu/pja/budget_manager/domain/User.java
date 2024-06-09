@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -38,8 +37,8 @@ public class User {
     @Column(columnDefinition = "TIMESTAMP")
     LocalDateTime creationDate;
 
-    String name;
-    String surname;
+    String firstName;
+    String lastName;
 
     @ToString.Exclude
     @OneToMany(mappedBy = "user",

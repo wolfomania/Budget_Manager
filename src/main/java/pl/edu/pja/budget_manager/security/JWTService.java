@@ -8,6 +8,7 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import pl.edu.pja.budget_manager.domain.User;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -24,11 +25,13 @@ public class JWTService {
 
     private SecretKey secretKey;
 
-    public String generateToken(UserPrincipal userPrincipal) {
-        return createToken(new HashMap<>(), userPrincipal.getUsername());
+    public String generateToken(User user) {
+        return createToken(new HashMap<>(), user.getEmail());
     }
 
-    public String generateToken(Map<String, Object> claims, UserPrincipal userPrincipal) {
+    public String generateToken(UserPrincipal userPrincipal) {
+        HashMap<String, Object> claims = new HashMap<>();
+        //TODO
         return createToken(claims, userPrincipal.getUsername());
     }
 
@@ -73,7 +76,11 @@ public class JWTService {
     }
 
     @PostConstruct
-    public void init() {
+    private void init() {
         secretKey = Jwts.SIG.HS512.key().build();
+    }
+
+    public long getExpirationTime() {
+        return expirationTime;
     }
 }

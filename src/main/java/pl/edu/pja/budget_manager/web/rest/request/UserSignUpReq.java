@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.NonNull;
 import lombok.Value;
+import pl.edu.pja.budget_manager.constraints.UniqueEmail;
 
 @Value
 public class UserSignUpReq {
@@ -12,6 +13,7 @@ public class UserSignUpReq {
     @NonNull
     @NotBlank(message = "User email can not be empty")
     @Email(message = "User email should be valid", regexp = ".*@.*\\..*")
+    @UniqueEmail
     String email;
 
     @NonNull
@@ -20,7 +22,7 @@ public class UserSignUpReq {
 
     String username;
 
-    String preferredCurrency;
+    Long preferredCurrencyId;
 
     String firstName;
 
