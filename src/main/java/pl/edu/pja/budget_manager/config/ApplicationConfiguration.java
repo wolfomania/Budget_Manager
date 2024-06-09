@@ -14,7 +14,6 @@ import pl.edu.pja.budget_manager.repositories.UserRepository;
 import pl.edu.pja.budget_manager.security.UserPrincipal;
 
 @Configuration
-@EnableWebSecurity
 @RequiredArgsConstructor
 public class ApplicationConfiguration {
 

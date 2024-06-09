@@ -22,7 +22,4 @@ spring:
 # Jwt configuration
   security:
     jwt:
-      key: JWT_KEY
       expiration: 600000
-      header: Authorization
-      prefix: Bearer
