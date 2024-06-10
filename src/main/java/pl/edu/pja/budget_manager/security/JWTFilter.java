@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,13 +21,14 @@ import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
+@FieldDefaults(makeFinal = true, level = lombok.AccessLevel.PRIVATE)
 public class JWTFilter extends OncePerRequestFilter {
 
-    private final HandlerExceptionResolver handlerExceptionResolver;
+    HandlerExceptionResolver handlerExceptionResolver;
 
-    private final UserDetailsService userDetailsService;
+    UserDetailsService userDetailsService;
 
-    private final JWTService jwtService;
+    JWTService jwtService;
 
     @Override
     protected void doFilterInternal(
@@ -41,7 +43,7 @@ public class JWTFilter extends OncePerRequestFilter {
             return;
         }
 
-        try {
+        try{
             final String jwt = authenticationHeader.substring(7);
             final String userEmail = jwtService.extractUsername(jwt);
 
@@ -61,10 +63,11 @@ public class JWTFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
             }
-
-            filterChain.doFilter(request, response);
-        } catch (Exception exception) {
-            handlerExceptionResolver.resolveException(request, response, null, exception);
+        } catch (Exception e) {
+            handlerExceptionResolver.resolveException(request, response, null, e);
         }
+
+        filterChain.doFilter(request, response);
+
     }
 }

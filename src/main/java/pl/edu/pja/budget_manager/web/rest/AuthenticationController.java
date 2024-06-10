@@ -1,9 +1,12 @@
 package pl.edu.pja.budget_manager.web.rest;
 
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,8 +35,17 @@ public class AuthenticationController {
     }
 
     @PostMapping("/sign-in")
-    public ResponseEntity<TokenRes> authenticate(@Valid @RequestBody UserSignInReq userSignInReq) {
+    public ResponseEntity<TokenRes> authenticate(@Valid @RequestBody UserSignInReq userSignInReq, HttpServletResponse response) {
         TokenRes tokenRes = authenticationService.signIn(userSignInReq);
+        ResponseCookie.ResponseCookieBuilder cookieBuilder = ResponseCookie
+                .from("token", tokenRes.getToken())
+                .httpOnly(true)
+                .secure(false) //TODO change to true later
+                .path("/")
+                .sameSite("Strict")
+                .maxAge(10 * 60);
+
+        response.addHeader(HttpHeaders.SET_COOKIE, cookieBuilder.build().toString());
 
         return ResponseEntity.ok(tokenRes);
     }

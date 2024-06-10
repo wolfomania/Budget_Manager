@@ -1,5 +1,6 @@
 package pl.edu.pja.budget_manager.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -24,6 +25,7 @@ public class User {
 
     @NonNull
     @ToString.Exclude
+    @JsonIgnore
     String password;
 
     String username;
@@ -40,7 +42,7 @@ public class User {
     String firstName;
     String lastName;
 
-    @ToString.Exclude
+    /*@ToString.Exclude
     @OneToMany(mappedBy = "user",
             orphanRemoval = true,
             cascade = {
@@ -55,13 +57,13 @@ public class User {
                     CascadeType.MERGE,
                     CascadeType.REFRESH
             })
-    Set<Transaction> transactions;
+    Set<Transaction> transactions;*/
 
     @ToString.Exclude
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
     Set<BudgetGroup> groups;
 
-    @ToString.Exclude
+    /*@ToString.Exclude
     @OneToMany(
             mappedBy = "user",
             cascade = CascadeType.ALL,
@@ -69,5 +71,5 @@ public class User {
             targetEntity = GroupApplication.class,
             fetch = FetchType.EAGER
     )
-    Set<GroupApplication> applications;
+    Set<GroupApplication> applications;*/
 }

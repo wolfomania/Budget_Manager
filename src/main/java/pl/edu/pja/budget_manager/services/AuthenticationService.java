@@ -11,6 +11,7 @@ import pl.edu.pja.budget_manager.domain.User;
 import pl.edu.pja.budget_manager.repositories.CurrencyRepository;
 import pl.edu.pja.budget_manager.repositories.UserRepository;
 import pl.edu.pja.budget_manager.security.JWTService;
+import pl.edu.pja.budget_manager.security.UserPrincipal;
 import pl.edu.pja.budget_manager.services.mappers.UserMapper;
 import pl.edu.pja.budget_manager.services.mappers.UserSignUpReqMapper;
 import pl.edu.pja.budget_manager.web.rest.request.UserSignInReq;
@@ -51,15 +52,17 @@ public class AuthenticationService {
     }
 
     public TokenRes signIn(UserSignInReq userSignInReq) {
-        authenticationManager.authenticate(
+        UserPrincipal principal = (UserPrincipal) (authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         userSignInReq.getEmail(),
                         userSignInReq.getPassword()
                 )
-        );
+        ).getPrincipal());
 
-        User user = userRepository.findUserByEmail(userSignInReq.getEmail())
-                .orElseThrow(() -> new NoSuchElementException("User not found"));
+        User user = principal.getUser();
+
+//        User user = userRepository.findUserByEmail(userSignInReq.getEmail())
+//                .orElseThrow(() -> new NoSuchElementException("User not found"));
 
         return TokenRes.of(jwtService.generateToken(user), jwtService.getExpirationTime());
     }

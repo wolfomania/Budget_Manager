@@ -1,5 +1,6 @@
 package pl.edu.pja.budget_manager.web.rest.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import pl.edu.pja.budget_manager.domain.Currency;
@@ -16,6 +17,7 @@ public class UserSignUpRes {
     String email;
 
     //TODO delete this later
+    @JsonIgnore
     String password;
 
     String username;

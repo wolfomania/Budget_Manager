@@ -1,6 +1,7 @@
 package pl.edu.pja.budget_manager.security;
 
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,11 +26,13 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@FieldDefaults(makeFinal = true, level = lombok.AccessLevel.PRIVATE)
 public class SecurityConfiguration {
 
 //    private final JWTFilter jwtFilter;
 
-    private final UserRepository userRepository;
+    UserRepository userRepository;
+
 
     @Bean
     public UserDetailsService userDetailsService() {
