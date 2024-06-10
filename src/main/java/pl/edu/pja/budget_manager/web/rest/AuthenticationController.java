@@ -17,7 +17,7 @@ import pl.edu.pja.budget_manager.web.rest.response.TokenRes;
 import pl.edu.pja.budget_manager.web.rest.response.UserSignUpRes;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 @FieldDefaults(makeFinal = true, level = lombok.AccessLevel.PRIVATE)
 @RequiredArgsConstructor
 public class AuthenticationController {

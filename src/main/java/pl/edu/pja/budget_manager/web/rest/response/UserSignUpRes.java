@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 
 @With
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
+@Getter
 @Builder
 @ToString
 public class UserSignUpRes {
