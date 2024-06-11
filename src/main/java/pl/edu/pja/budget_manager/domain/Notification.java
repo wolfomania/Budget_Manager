@@ -1,5 +1,7 @@
 package pl.edu.pja.budget_manager.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -24,6 +26,7 @@ public class Notification {
 
     @ManyToOne
     @ToString.Exclude
+    @JsonIgnore
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     User user;
 }

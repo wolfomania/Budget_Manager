@@ -8,4 +8,6 @@ import java.util.Set;
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
 
     Set<Notification> findAllByUserEmail(String email);
+
+    boolean existsNotificationByUserEmailAndNotificationId(String email, Long notificationId);
 }

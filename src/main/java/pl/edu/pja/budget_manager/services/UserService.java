@@ -15,9 +15,14 @@ import pl.edu.pja.budget_manager.services.mappers.UserMapper;
 import pl.edu.pja.budget_manager.web.rest.request.AddUserTransactionReq;
 import pl.edu.pja.budget_manager.web.rest.request.UserPatchReq;
 import pl.edu.pja.budget_manager.web.rest.response.UserProfileRes;
+import pl.edu.pja.budget_manager.web.rest.response.UserSummaryRes;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
@@ -97,5 +102,24 @@ public class UserService {
                 throw new IllegalArgumentException("User don't have transaction with id: " + transactionId + ".");
             return transaction;
         }).orElseThrow(() -> new IllegalArgumentException("Transaction with id: " + transactionId + " doesn't exist."));
+    }
+
+    public void deleteNotification(Long notificationId) {
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userPrincipal.getUser();
+        if (!notificationRepository.existsNotificationByUserEmailAndNotificationId(user.getEmail(), notificationId))
+            throw new IllegalArgumentException("User don't have notification with id: " + notificationId + " or notification doesn't exist.");
+        notificationRepository.deleteById(notificationId);
+    }
+
+    public UserSummaryRes getSummary(LocalDateTime startDate, LocalDateTime endDate) {
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userPrincipal.getUser();
+        Set<Transaction> transactions = transactionRepository.findTransactionsByUserEmailAndDateBetween(user.getEmail(), startDate, endDate);
+
+        Map<String, Set<Transaction>> transactionCategorySetMap = transactions.stream()
+                .collect(Collectors.groupingBy(transaction -> transaction.getCategory().getName(), Collectors.toSet()));
+
+        return TransactionMapper.mapToUserSummaryRes(transactionCategorySetMap);
     }
 }

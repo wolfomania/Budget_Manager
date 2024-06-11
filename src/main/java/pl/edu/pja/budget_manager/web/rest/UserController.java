@@ -3,6 +3,7 @@ package pl.edu.pja.budget_manager.web.rest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.cglib.core.Local;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,7 +19,11 @@ import pl.edu.pja.budget_manager.web.rest.request.AddUserTransactionReq;
 import pl.edu.pja.budget_manager.web.rest.request.UserPatchReq;
 import pl.edu.pja.budget_manager.web.rest.response.TransactionRes;
 import pl.edu.pja.budget_manager.web.rest.response.UserProfileRes;
+import pl.edu.pja.budget_manager.web.rest.response.UserSummaryRes;
 
+import java.security.Principal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 @RestController
@@ -42,6 +47,12 @@ public class UserController {
     @GetMapping("/notifications")
     public ResponseEntity<Collection<Notification>> getUserNotifications() {
         return ResponseEntity.ok(userService.getUserNotifications());
+    }
+
+    @DeleteMapping("/notifications/{notificationId}")
+    public ResponseEntity<Void> deleteNotification(@PathVariable Long notificationId) {
+        userService.deleteNotification(notificationId);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/transactions")
@@ -69,4 +80,9 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/summary/{startDate}/{endDate}")
+    public ResponseEntity<UserSummaryRes> getSummary(@PathVariable LocalDateTime startDate, @PathVariable LocalDateTime endDate) {
+        UserSummaryRes summary = userService.getSummary(startDate, endDate);
+        return ResponseEntity.ok(summary);
+    }
 }
