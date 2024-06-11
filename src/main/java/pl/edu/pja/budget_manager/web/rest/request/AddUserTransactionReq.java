@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import pl.edu.pja.budget_manager.constraints.CurrencyWithIdExist;
+import pl.edu.pja.budget_manager.constraints.TransactionCategoryWithIdExist;
 import pl.edu.pja.budget_manager.domain.Currency;
 import pl.edu.pja.budget_manager.domain.TransactionCategory;
 
@@ -27,8 +29,10 @@ public class AddUserTransactionReq {
     String description;
 
     @NonNull
+    @TransactionCategoryWithIdExist
     Long categoryId;
 
     @NonNull
+    @CurrencyWithIdExist
     Long currencyId;
 }

@@ -1,5 +1,6 @@
 package pl.edu.pja.budget_manager.services.mappers;
 
+import lombok.NoArgsConstructor;
 import pl.edu.pja.budget_manager.domain.Currency;
 import pl.edu.pja.budget_manager.domain.Transaction;
 import pl.edu.pja.budget_manager.domain.TransactionCategory;
@@ -14,6 +15,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@NoArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public class TransactionMapper {
 
     public static Transaction mapFromAddUserTransactionReq(AddUserTransactionReq addUserTransactionReq, User user, TransactionCategory transactionCategory, Currency currency) {
@@ -33,8 +35,8 @@ public class TransactionMapper {
                 .amount(transaction.getAmount())
                 .date(transaction.getDate())
                 .description(transaction.getDescription())
-                .category(transaction.getCategory().getName())
-                .currency(transaction.getCurrency().getName())
+                .category(transaction.getCategory() == null ? null : transaction.getCategory().getName())
+                .currency(transaction.getCurrency() == null ? null : transaction.getCurrency().getName())
                 .email(transaction.getUser().getEmail())
                 .build();
     }

@@ -23,3 +23,9 @@ spring:
   security:
     jwt:
       expiration: 600000
+
+# Default configuration
+transaction:
+  default:
+    currencyId: 1
+    categoryId: 1

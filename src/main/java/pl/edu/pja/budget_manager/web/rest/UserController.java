@@ -56,8 +56,8 @@ public class UserController {
     }
 
     @GetMapping("/transactions")
-    public ResponseEntity<Collection<TransactionRes>> getUserTransactions() {
-        Collection<Transaction> transactions = userService.getUserTransactions();
+    public ResponseEntity<Collection<TransactionRes>> getUserTransactions(Principal principal) {
+        Collection<Transaction> transactions = userService.getUserTransactions(principal.getName());
         Collection<TransactionRes> transactionRes = TransactionMapper.mapToTransactionResCollection(transactions);
         return ResponseEntity.ok(transactionRes);
     }
@@ -81,8 +81,8 @@ public class UserController {
     }
 
     @GetMapping("/summary/{startDate}/{endDate}")
-    public ResponseEntity<UserSummaryRes> getSummary(@PathVariable LocalDateTime startDate, @PathVariable LocalDateTime endDate) {
-        UserSummaryRes summary = userService.getSummary(startDate, endDate);
+    public ResponseEntity<UserSummaryRes> getSummary(Principal principal, @PathVariable LocalDateTime startDate, @PathVariable LocalDateTime endDate) {
+        UserSummaryRes summary = userService.getSummary(principal.getName(), startDate, endDate);
         return ResponseEntity.ok(summary);
     }
 }

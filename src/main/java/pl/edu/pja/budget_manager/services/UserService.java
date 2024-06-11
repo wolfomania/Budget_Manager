@@ -3,7 +3,9 @@ package pl.edu.pja.budget_manager.services;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,9 +69,9 @@ public class UserService {
         return notificationRepository.findAllByUserEmail(user.getEmail());
     }
 
-    public Collection<Transaction> getUserTransactions() {
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userPrincipal.getUser();
+    public Collection<Transaction> getUserTransactions(String email) {
+        User user = userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User with email: " + email + " doesn't exist."));
         return transactionRepository.findAllByUserEmail(user.getEmail());
     }
 
@@ -77,10 +79,13 @@ public class UserService {
     public Transaction addTransaction(AddUserTransactionReq addUserTransactionReq) {
         UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userPrincipal.getUser();
+
         TransactionCategory category = transactionCategoryRepository.findById(addUserTransactionReq.getCategoryId())
-                .orElse(null);
+                .orElseThrow();
+
         Currency currency = currencyRepository.findById(addUserTransactionReq.getCurrencyId())
-                .orElse(null);
+                .orElseThrow();
+
         Transaction transaction = TransactionMapper.mapFromAddUserTransactionReq(addUserTransactionReq, user, category, currency);
         return transactionRepository.save(transaction);
     }
@@ -112,9 +117,10 @@ public class UserService {
         notificationRepository.deleteById(notificationId);
     }
 
-    public UserSummaryRes getSummary(LocalDateTime startDate, LocalDateTime endDate) {
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userPrincipal.getUser();
+    public UserSummaryRes getSummary(String email, LocalDateTime startDate, LocalDateTime endDate) {
+        User user = userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User with email: " + email + " doesn't exist."));
+
         Set<Transaction> transactions = transactionRepository.findTransactionsByUserEmailAndDateBetween(user.getEmail(), startDate, endDate);
 
         Map<String, Set<Transaction>> transactionCategorySetMap = transactions.stream()
