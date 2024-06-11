@@ -43,10 +43,25 @@ public class AuthenticationController {
                 .secure(false) //TODO change to true later
                 .path("/")
                 .sameSite("Strict")
-                .maxAge(10 * 60);
+                .maxAge(tokenRes.getExpiresIn() / 1000);
 
         response.addHeader(HttpHeaders.SET_COOKIE, cookieBuilder.build().toString());
 
         return ResponseEntity.ok(tokenRes);
+    }
+
+    @PostMapping("/sign-out")
+    public ResponseEntity<Void> signOut(HttpServletResponse response) {
+        ResponseCookie.ResponseCookieBuilder cookieBuilder = ResponseCookie
+                .from("token", "")
+                .httpOnly(true)
+                .secure(false) //TODO change to true later
+                .path("/")
+                .sameSite("Strict")
+                .maxAge(0);
+
+        response.addHeader(HttpHeaders.SET_COOKIE, cookieBuilder.build().toString());
+
+        return ResponseEntity.ok().build();
     }
 }

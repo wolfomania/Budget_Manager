@@ -1,19 +1,25 @@
 package pl.edu.pja.budget_manager.web.rest;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import pl.edu.pja.budget_manager.domain.Notification;
+import pl.edu.pja.budget_manager.domain.Transaction;
 import pl.edu.pja.budget_manager.domain.User;
 import pl.edu.pja.budget_manager.security.UserPrincipal;
 import pl.edu.pja.budget_manager.services.UserService;
+import pl.edu.pja.budget_manager.services.mappers.TransactionMapper;
 import pl.edu.pja.budget_manager.services.mappers.UserMapper;
+import pl.edu.pja.budget_manager.web.rest.request.AddUserTransactionReq;
+import pl.edu.pja.budget_manager.web.rest.request.UserPatchReq;
+import pl.edu.pja.budget_manager.web.rest.response.TransactionRes;
 import pl.edu.pja.budget_manager.web.rest.response.UserProfileRes;
+
+import java.util.Collection;
 
 @RestController
 @RequestMapping("/api/user")
@@ -26,6 +32,41 @@ public class UserController {
     @GetMapping()
     public ResponseEntity<UserProfileRes> getUserProfile() {
         return ResponseEntity.ok(userService.getUserProfile());
+    }
+
+    @PatchMapping()
+    public ResponseEntity<UserProfileRes> updateUserProfile(@Valid @RequestBody UserPatchReq userPatchReq) {
+        return ResponseEntity.ok(userService.updateUserProfile(userPatchReq));
+    }
+
+    @GetMapping("/notifications")
+    public ResponseEntity<Collection<Notification>> getUserNotifications() {
+        return ResponseEntity.ok(userService.getUserNotifications());
+    }
+
+    @GetMapping("/transactions")
+    public ResponseEntity<Collection<TransactionRes>> getUserTransactions() {
+        Collection<Transaction> transactions = userService.getUserTransactions();
+        Collection<TransactionRes> transactionRes = TransactionMapper.mapToTransactionResCollection(transactions);
+        return ResponseEntity.ok(transactionRes);
+    }
+
+    @PostMapping("/transactions")
+    public ResponseEntity<TransactionRes> addTransaction(@Valid @RequestBody AddUserTransactionReq addUserTransactionReq) {
+        Transaction transaction = userService.addTransaction(addUserTransactionReq);
+        return ResponseEntity.ok(TransactionMapper.mapToTransactionRes(transaction));
+    }
+
+    @GetMapping("/transactions/{transactionId}")
+    public ResponseEntity<TransactionRes> getTransaction(@PathVariable Long transactionId) {
+        Transaction transaction = userService.getTransaction(transactionId);
+        return ResponseEntity.ok(TransactionMapper.mapToTransactionRes(transaction));
+    }
+
+    @DeleteMapping("/transactions/{transactionId}")
+    public ResponseEntity<Void> deleteTransaction(@PathVariable Long transactionId) {
+        userService.deleteTransaction(transactionId);
+        return ResponseEntity.noContent().build();
     }
 
 }

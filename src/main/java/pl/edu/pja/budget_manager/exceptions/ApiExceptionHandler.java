@@ -35,6 +35,10 @@ public class ApiExceptionHandler {
         return ResponseEntity.status(400).header("Description", "Invalid JWT token").build();
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) {
+        return ResponseEntity.status(400).header("Description", "Invalid request body").body(e.getMessage());
+    }
     /*@ExceptionHandler(Exception.class)
     public ProblemDetail handleException(Exception e) {
 

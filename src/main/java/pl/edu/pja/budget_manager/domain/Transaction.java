@@ -10,6 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "transaction")
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor
