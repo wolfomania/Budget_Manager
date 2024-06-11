@@ -22,7 +22,7 @@ public class CurrencyWithIdExistValidator implements ConstraintValidator<Currenc
 
     @Override
     public boolean isValid(Long value, ConstraintValidatorContext context) {
-        if(currencyRepository.findById(value).isEmpty()) {
+        if(value != null && currencyRepository.findById(value).isEmpty()) {
             context.disableDefaultConstraintViolation();
             context.buildConstraintViolationWithTemplate(message)
                     .addConstraintViolation();

@@ -1,9 +1,7 @@
 package pl.edu.pja.budget_manager.services;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,11 +13,12 @@ import pl.edu.pja.budget_manager.security.UserPrincipal;
 import pl.edu.pja.budget_manager.services.mappers.TransactionMapper;
 import pl.edu.pja.budget_manager.services.mappers.UserMapper;
 import pl.edu.pja.budget_manager.web.rest.request.AddUserTransactionReq;
+import pl.edu.pja.budget_manager.web.rest.request.PatchTransactionReq;
 import pl.edu.pja.budget_manager.web.rest.request.UserPatchReq;
+import pl.edu.pja.budget_manager.web.rest.response.TransactionRes;
 import pl.edu.pja.budget_manager.web.rest.response.UserProfileRes;
 import pl.edu.pja.budget_manager.web.rest.response.UserSummaryRes;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Map;
@@ -55,9 +54,10 @@ public class UserService {
         UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userPrincipal.getUser();
         Currency currency  = currencyRepository.findById(userPatchReq.getPreferredCurrencyId())
-                    .orElse(null);
+                    .orElseThrow();
         if(userPatchReq.getPassword() != null)
             userPatchReq = userPatchReq.withPassword(passwordEncoder.encode(userPatchReq.getPassword()));
+
         user = UserMapper.mapUserPatchReqToUser(userPatchReq, user, currency);
         userRepository.save(user);
         return UserMapper.mapToUserProfileRes(user, notificationRepository.findAllByUserEmail(user.getEmail()));
@@ -69,46 +69,7 @@ public class UserService {
         return notificationRepository.findAllByUserEmail(user.getEmail());
     }
 
-    public Collection<Transaction> getUserTransactions(String email) {
-        User user = userRepository.findUserByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User with email: " + email + " doesn't exist."));
-        return transactionRepository.findAllByUserEmail(user.getEmail());
-    }
-
     @Transactional
-    public Transaction addTransaction(AddUserTransactionReq addUserTransactionReq) {
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userPrincipal.getUser();
-
-        TransactionCategory category = transactionCategoryRepository.findById(addUserTransactionReq.getCategoryId())
-                .orElseThrow();
-
-        Currency currency = currencyRepository.findById(addUserTransactionReq.getCurrencyId())
-                .orElseThrow();
-
-        Transaction transaction = TransactionMapper.mapFromAddUserTransactionReq(addUserTransactionReq, user, category, currency);
-        return transactionRepository.save(transaction);
-    }
-
-    @Transactional
-    public void deleteTransaction(Long transactionId) {
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userPrincipal.getUser();
-        if (!transactionRepository.existsTransactionByUserEmailAndTransactionId(user.getEmail(), transactionId))
-            throw new IllegalArgumentException("User don't have transaction with id: " + transactionId + " or transaction doesn't exist.");
-        transactionRepository.deleteById(transactionId);
-    }
-
-    public Transaction getTransaction(Long transactionId) {
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userPrincipal.getUser();
-        return transactionRepository.findById(transactionId).map(transaction -> {
-            if (!transaction.getUser().getEmail().equals(user.getEmail()))
-                throw new IllegalArgumentException("User don't have transaction with id: " + transactionId + ".");
-            return transaction;
-        }).orElseThrow(() -> new IllegalArgumentException("Transaction with id: " + transactionId + " doesn't exist."));
-    }
-
     public void deleteNotification(Long notificationId) {
         UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userPrincipal.getUser();
@@ -128,4 +89,5 @@ public class UserService {
 
         return TransactionMapper.mapToUserSummaryRes(transactionCategorySetMap);
     }
+
 }

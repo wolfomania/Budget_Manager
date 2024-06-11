@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface TransactionCategoryWithIdExist {
 
-    String message() default "Currency with this id does not exist";
+    String message() default "Transaction category with this id does not exist";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

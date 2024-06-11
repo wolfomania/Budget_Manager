@@ -2,6 +2,7 @@ package pl.edu.pja.budget_manager.web.rest;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import lombok.experimental.FieldDefaults;
 import org.springframework.cglib.core.Local;
 import org.springframework.http.ResponseCookie;
@@ -16,6 +17,7 @@ import pl.edu.pja.budget_manager.services.UserService;
 import pl.edu.pja.budget_manager.services.mappers.TransactionMapper;
 import pl.edu.pja.budget_manager.services.mappers.UserMapper;
 import pl.edu.pja.budget_manager.web.rest.request.AddUserTransactionReq;
+import pl.edu.pja.budget_manager.web.rest.request.PatchTransactionReq;
 import pl.edu.pja.budget_manager.web.rest.request.UserPatchReq;
 import pl.edu.pja.budget_manager.web.rest.response.TransactionRes;
 import pl.edu.pja.budget_manager.web.rest.response.UserProfileRes;
@@ -52,31 +54,6 @@ public class UserController {
     @DeleteMapping("/notifications/{notificationId}")
     public ResponseEntity<Void> deleteNotification(@PathVariable Long notificationId) {
         userService.deleteNotification(notificationId);
-        return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/transactions")
-    public ResponseEntity<Collection<TransactionRes>> getUserTransactions(Principal principal) {
-        Collection<Transaction> transactions = userService.getUserTransactions(principal.getName());
-        Collection<TransactionRes> transactionRes = TransactionMapper.mapToTransactionResCollection(transactions);
-        return ResponseEntity.ok(transactionRes);
-    }
-
-    @PostMapping("/transactions")
-    public ResponseEntity<TransactionRes> addTransaction(@Valid @RequestBody AddUserTransactionReq addUserTransactionReq) {
-        Transaction transaction = userService.addTransaction(addUserTransactionReq);
-        return ResponseEntity.ok(TransactionMapper.mapToTransactionRes(transaction));
-    }
-
-    @GetMapping("/transactions/{transactionId}")
-    public ResponseEntity<TransactionRes> getTransaction(@PathVariable Long transactionId) {
-        Transaction transaction = userService.getTransaction(transactionId);
-        return ResponseEntity.ok(TransactionMapper.mapToTransactionRes(transaction));
-    }
-
-    @DeleteMapping("/transactions/{transactionId}")
-    public ResponseEntity<Void> deleteTransaction(@PathVariable Long transactionId) {
-        userService.deleteTransaction(transactionId);
         return ResponseEntity.noContent().build();
     }
 

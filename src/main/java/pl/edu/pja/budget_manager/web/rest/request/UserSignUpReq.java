@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.NonNull;
 import lombok.Value;
+import pl.edu.pja.budget_manager.constraints.CurrencyWithIdExist;
 import pl.edu.pja.budget_manager.constraints.UniqueEmail;
 
 @Value
@@ -22,6 +23,7 @@ public class UserSignUpReq {
 
     String username;
 
+    @CurrencyWithIdExist
     Long preferredCurrencyId;
 
     String firstName;

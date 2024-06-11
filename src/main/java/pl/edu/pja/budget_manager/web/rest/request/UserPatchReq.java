@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Null;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import pl.edu.pja.budget_manager.constraints.CurrencyWithIdExist;
 
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
@@ -18,6 +19,7 @@ public class UserPatchReq {
     String username;
 
     @NonNull
+    @CurrencyWithIdExist
     Long preferredCurrencyId;
 
     String firstName;

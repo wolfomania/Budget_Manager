@@ -6,6 +6,7 @@ import pl.edu.pja.budget_manager.domain.Transaction;
 import pl.edu.pja.budget_manager.domain.TransactionCategory;
 import pl.edu.pja.budget_manager.domain.User;
 import pl.edu.pja.budget_manager.web.rest.request.AddUserTransactionReq;
+import pl.edu.pja.budget_manager.web.rest.request.PatchTransactionReq;
 import pl.edu.pja.budget_manager.web.rest.response.TransactionRes;
 import pl.edu.pja.budget_manager.web.rest.response.UserSummaryRes;
 
@@ -58,5 +59,23 @@ public class TransactionMapper {
         });
 
         return UserSummaryRes.of(result);
+    }
+
+    public static Transaction patchFromTransactionReq(
+            PatchTransactionReq patchTransactionReq,
+            Transaction transaction,
+            TransactionCategory transactionCategory,
+            Currency currency
+    )
+    {
+        return Transaction.builder()
+                .transactionId(transaction.getTransactionId())
+                .amount(patchTransactionReq.getAmount() == null ? transaction.getAmount() : patchTransactionReq.getAmount())
+                .date(patchTransactionReq.getDate() == null ? transaction.getDate() : patchTransactionReq.getDate())
+                .description(patchTransactionReq.getDescription() == null ? transaction.getDescription() : patchTransactionReq.getDescription())
+                .category(transactionCategory == null ? transaction.getCategory() : transactionCategory)
+                .currency(currency == null ? transaction.getCurrency() : currency)
+                .user(transaction.getUser())
+                .build();
     }
 }

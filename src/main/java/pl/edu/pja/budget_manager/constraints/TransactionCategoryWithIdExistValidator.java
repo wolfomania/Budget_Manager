@@ -22,7 +22,7 @@ public class TransactionCategoryWithIdExistValidator implements ConstraintValida
 
     @Override
     public boolean isValid(Long value, ConstraintValidatorContext context) {
-        if(transactionCategoryRepository.findById(value).isEmpty()) {
+        if(value != null && transactionCategoryRepository.findById(value).isEmpty()) {
             context.disableDefaultConstraintViolation();
             context.buildConstraintViolationWithTemplate(message)
                     .addConstraintViolation();
