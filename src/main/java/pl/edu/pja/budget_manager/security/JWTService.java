@@ -12,6 +12,7 @@ import pl.edu.pja.budget_manager.domain.User;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;

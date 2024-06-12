@@ -29,17 +29,19 @@ import java.util.List;
 @FieldDefaults(makeFinal = true, level = lombok.AccessLevel.PRIVATE)
 public class SecurityConfiguration {
 
-//    private final JWTFilter jwtFilter;
+    JWTFilter jwtFilter;
 
-    UserRepository userRepository;
+//    UserRepository userRepository;
+
+    MyUserDetailService userDetailsService;
 
 
-    @Bean
+    /*@Bean
     public UserDetailsService userDetailsService() {
         return email -> userRepository.findUserByEmail(email)
                 .map(UserPrincipal::new)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-    }
+    }*/
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -55,14 +57,14 @@ public class SecurityConfiguration {
     AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 
-        authProvider.setUserDetailsService(userDetailsService());
+        authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
 
         return authProvider;
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http,JWTFilter jwtFilter) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 

@@ -45,7 +45,7 @@ public class TransactionMapper {
     public static Collection<TransactionRes> mapToTransactionResCollection(Collection<Transaction> transactions) {
         return transactions.stream()
                 .map(TransactionMapper::mapToTransactionRes)
-                .collect(Collectors.toSet());
+                .toList();
     }
 
     public static UserSummaryRes mapToUserSummaryRes(Map<String, Set<Transaction>> transactionCategorySetMap) {

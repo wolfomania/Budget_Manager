@@ -38,13 +38,13 @@ public class UserTransactionService {
     public Collection<Transaction> getUserTransactions(String email) {
         User user = userRepository.findUserByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User with email: " + email + " doesn't exist."));
-        return transactionRepository.findAllByUserEmail(user.getEmail());
+        return transactionRepository.findAllByUserEmailOrderByDateAsc(user.getEmail());
     }
 
     @Transactional
-    public Transaction addTransaction(AddUserTransactionReq addUserTransactionReq) {
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userPrincipal.getUser();
+    public Transaction addTransaction(AddUserTransactionReq addUserTransactionReq, String email) {
+        User user = userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User with email: " + email + " doesn't exist."));
 
         TransactionCategory category = transactionCategoryRepository.findById(addUserTransactionReq.getCategoryId())
                 .orElseThrow();

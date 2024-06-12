@@ -2,6 +2,7 @@ package pl.edu.pja.budget_manager.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
 
@@ -11,28 +12,38 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@With
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class PeriodicTransaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "periodic_transaction_id")
-    private Long periodicTransactionId;
+    Long periodicTransactionId;
 
     private Double amount;
+
     @Column(columnDefinition = "TIMESTAMP")
-    private LocalDateTime creationDate;
-    private String description;
+    LocalDateTime creationDate;
+
+    @Column(columnDefinition = "TIMESTAMP")
+    LocalDateTime lastExecutionDate;
+
+    Long frequency;
+
+    String description;
 
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "category_id")
-    private TransactionCategory category;
+    TransactionCategory category;
 
     @ManyToOne
     @JoinColumn(name = "currency_id", referencedColumnName = "currency_id")
-    private Currency currency;
+    Currency currency;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
-    private User user;
+    User user;
 
 }

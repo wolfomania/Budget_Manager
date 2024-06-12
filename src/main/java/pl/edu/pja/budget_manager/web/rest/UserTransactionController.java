@@ -31,8 +31,8 @@ public class UserTransactionController {
     }
 
     @PostMapping()
-    public ResponseEntity<TransactionRes> addTransaction(@Valid @RequestBody AddUserTransactionReq addUserTransactionReq) {
-        Transaction transaction = userTransactionService.addTransaction(addUserTransactionReq);
+    public ResponseEntity<TransactionRes> addTransaction(Principal principal, @Valid @RequestBody AddUserTransactionReq addUserTransactionReq) {
+        Transaction transaction = userTransactionService.addTransaction(addUserTransactionReq, principal.getName());
         return ResponseEntity.ok(TransactionMapper.mapToTransactionRes(transaction));
     }
 
