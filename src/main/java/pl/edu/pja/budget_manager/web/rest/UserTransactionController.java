@@ -52,4 +52,13 @@ public class UserTransactionController {
         userTransactionService.deleteTransaction(transactionId);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/new")
+    public ResponseEntity<Collection<TransactionRes>> getNewTransaction() {
+        return ResponseEntity.ok(
+                TransactionMapper.mapToTransactionResCollection(
+                        userTransactionService.getUserNewTransactionFromLastLogIn()
+                )
+        );
+    }
 }

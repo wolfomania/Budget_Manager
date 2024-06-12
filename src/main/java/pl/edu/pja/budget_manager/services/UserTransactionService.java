@@ -102,4 +102,10 @@ public class UserTransactionService {
         transactionRepository.save(transaction);
         return TransactionMapper.mapToTransactionRes(transaction);
     }
+
+    public Collection<Transaction> getUserNewTransactionFromLastLogIn() {
+        UserPrincipal principal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = principal.getUser();
+        return transactionRepository.findTransactionsByUserEmailAndDateAfterOrderByDateDesc(user.getEmail(), user.getLastLogInDate());
+    }
 }

@@ -23,8 +23,12 @@ public class BudgetGroup {
     Long groupId;
 
     String name;
+
     @Column(columnDefinition = "TIMESTAMP")
     LocalDateTime creationDate;
+
+    @Column(columnDefinition = "TIMESTAMP")
+    LocalDateTime lastModificationDate;
 
     @ManyToOne
     @JoinColumn(name = "creator_id", referencedColumnName = "user_id")
@@ -34,7 +38,8 @@ public class BudgetGroup {
             mappedBy = "group",
             cascade = CascadeType.ALL,
             orphanRemoval = true,
-            targetEntity = GroupInvitation.class
+            targetEntity = GroupInvitation.class,
+            fetch = FetchType.EAGER
     )
     Set<GroupInvitation> invitations;
 

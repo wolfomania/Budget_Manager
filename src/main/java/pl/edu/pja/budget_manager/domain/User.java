@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.CurrentTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -13,6 +15,7 @@ import java.util.Set;
 @Table(name = "users")
 @Getter
 @Setter
+@With
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -39,6 +42,9 @@ public class User {
     @CreationTimestamp
     @Column(columnDefinition = "TIMESTAMP")
     LocalDateTime creationDate;
+
+    @Column(columnDefinition = "TIMESTAMP")
+    LocalDateTime lastLogInDate;
 
     String firstName;
     String lastName;

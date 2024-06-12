@@ -26,6 +26,8 @@ public class UserSignUpRes {
 
     LocalDateTime creationDate;
 
+    LocalDateTime lastLogInDate;
+
     String firstName;
 
     String lastName;

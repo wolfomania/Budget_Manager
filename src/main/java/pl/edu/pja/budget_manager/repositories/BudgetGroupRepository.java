@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface BudgetGroupRepository extends JpaRepository<BudgetGroup, Long> {
 
-    List<BudgetGroup> findAllByOrderByGroupId();
+    List<BudgetGroup> findAllByUsersEmail(String email);
+
 }

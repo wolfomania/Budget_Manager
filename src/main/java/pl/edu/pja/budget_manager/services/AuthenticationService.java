@@ -19,6 +19,7 @@ import pl.edu.pja.budget_manager.web.rest.request.UserSignUpReq;
 import pl.edu.pja.budget_manager.web.rest.response.TokenRes;
 import pl.edu.pja.budget_manager.web.rest.response.UserSignUpRes;
 
+import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 
 @Service
@@ -38,7 +39,7 @@ public class AuthenticationService {
 
     public UserSignUpRes signUp(UserSignUpReq userSignUpReq) {
         Currency currency = currencyRepository.findById(userSignUpReq.getPreferredCurrencyId())
-                .orElse(null);
+                .orElseThrow();
 
         User newUser = UserSignUpReqMapper.mapToUserSignUpRes(
                 userSignUpReq,
@@ -60,7 +61,8 @@ public class AuthenticationService {
         ).getPrincipal());
 
         User user = principal.getUser();
-
+        user = user.withLastLogInDate(LocalDateTime.now());
+        userRepository.save(user);
 //        User user = userRepository.findUserByEmail(userSignInReq.getEmail())
 //                .orElseThrow(() -> new NoSuchElementException("User not found"));
 

@@ -22,6 +22,7 @@ public class UserMapper {
                 .password(user.getPassword())
                 .preferredCurrency(user.getPreferredCurrency())
                 .creationDate(user.getCreationDate())
+                .lastLogInDate(user.getLastLogInDate())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .build();

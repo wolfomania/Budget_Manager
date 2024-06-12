@@ -15,4 +15,5 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     Set<Transaction> findTransactionsByUserEmailAndDateBetween(String email, LocalDateTime date, LocalDateTime date2);
 
+    List<Transaction> findTransactionsByUserEmailAndDateAfterOrderByDateDesc(String email, LocalDateTime date);
 }
