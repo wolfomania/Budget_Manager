@@ -82,7 +82,7 @@ Functionalities:
 
 User requirements:
 
-1. **Part one:**
+1. **Database Design and Relationships:**
 
    **Tables:**
 
@@ -125,7 +125,8 @@ User requirements:
   Budget\_Group:
 
 - One-to-Many: A budget group can have multiple invitation links to it at the same time.
-2. **Part two:**
+
+2. **Functional Features:**
 - Login/Register (Guest)
 - View user profile
 - Change user information
@@ -141,7 +142,8 @@ User requirements:
 - Add transaction to budget group
 - Configure group transaction distribution
 - Get group summary
-3. **Part three:**
+
+3. **Security and Usability Standards:**
 - All sensitive user data should be encrypted.
 - All user inputs must be validated both client-side and server-side to prevent errors and fraudulent activities.
 - The system architecture must follow the open-closed principle for easier future functionality extensions.
