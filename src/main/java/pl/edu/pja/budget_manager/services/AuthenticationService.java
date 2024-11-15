@@ -20,7 +20,6 @@ import pl.edu.pja.budget_manager.web.rest.response.TokenRes;
 import pl.edu.pja.budget_manager.web.rest.response.UserSignUpRes;
 
 import java.time.LocalDateTime;
-import java.util.NoSuchElementException;
 
 @Service
 @FieldDefaults(makeFinal = true, level = lombok.AccessLevel.PRIVATE)
@@ -41,7 +40,7 @@ public class AuthenticationService {
         Currency currency = currencyRepository.findById(userSignUpReq.getPreferredCurrencyId())
                 .orElseThrow();
 
-        User newUser = UserSignUpReqMapper.mapToUserSignUpRes(
+        User newUser = UserSignUpReqMapper.mapToUser(
                 userSignUpReq,
                 passwordEncoder.encode(userSignUpReq.getPassword()),
                 currency

@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 public class UserSignUpReqMapper {
 
-    public static User mapToUserSignUpRes(UserSignUpReq userSignUpReq, String password, Currency currency) {
+    public static User mapToUser(UserSignUpReq userSignUpReq, String password, Currency currency) {
         return User.builder()
                 .email(userSignUpReq.getEmail())
                 .password(password)

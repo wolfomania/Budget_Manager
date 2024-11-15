@@ -5,8 +5,8 @@ spring:
 # Server configuration
   datasource:
     url: jdbc:mysql://localhost:3306/TPO
-    username: root
-    password: dementor
+    username: user
+    password: password
 
   jpa:
     hibernate:
